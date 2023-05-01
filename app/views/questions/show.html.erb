@@ -1,0 +1,30 @@
+<h2><%= @question.title %></h2>
+<h3><%= @question.body %></h3>
+  <% if @question.user %>
+  <small>Asked by <%= @question.user.full_name %> </small>
+  <% end %>
+<p><%= @question.created_at %></p>
+
+<%= button_to "Edit", edit_question_path(@question), :method => :get %>
+<%= button_to "Delete", @question, method: :delete %>
+
+<% @question.answers.each do |answer| %>
+  <div>
+  <%= answer.body %> 
+  <% if answer.user %>
+  <small> Answered by <%= answer.user.full_name %> </small>
+  <% end %>
+  <small> Answered <%= time_ago_in_words(answer.created_at) %> ago </small>
+  <%= button_to "Delete", [@question, answer], method: :delete %>
+  </div>
+  <hr>
+<% end %>
+
+<%= form_for [@question, @answer], data: { turbo: false } do |f| %>
+    <div>
+        <%= f.label :body %>
+        <%= f.text_area :body %>
+    </div>
+
+    <%= f.submit %>
+<% end %>
